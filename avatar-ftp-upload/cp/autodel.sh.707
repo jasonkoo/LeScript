@@ -1,0 +1,12 @@
+#! /bin/bash
+echo -e "`date "+%Y-%m-%d %H:%M:%S"` start clean up \n\n"
+
+BAK_DIR=/data/tmp/avatar/bak
+RPS_LOGS=`find $BAK_DIR -name "*.tar.gz" -type f -mtime +2`
+#RPS_LOGS=`find $BAK_DIR -name "*.tar.gz" -type f`
+for log in $RPS_LOGS ; do
+        echo 'delete file: '$log
+        rm -f $log
+done
+
+echo -e "`date "+%Y-%m-%d %H:%M:%S"` finish clean up \n\n"

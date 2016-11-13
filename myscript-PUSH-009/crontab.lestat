@@ -1,0 +1,13 @@
+#30 6 * * * /data/myscript/hdfs/backup-result.sh >> /data/myscript/hdfs/logs/backup-result.log
+#30 0 * * * /data/myscript/hive/alter-partition.sh >> /data/myscript/hive/logs/alter-partition.log
+#50 5 * * * /data/myscript/hive/calc-appfeedback-effect.sh >> /data/myscript/hive/logs/hivetask.log.$(date "+\%Y\%m\%d")
+#40 0 * * * /data/myscript/feedback/zuk/feedback-stat.sh >> /data/myscript/feedback/zuk/logs/feedback-stat.log 
+#50 4 * * * /data/myscript/feedback/worldwide/avazu/stat.sh 2>> /data/myscript/feedback/worldwide/avazu/stat.log
+#0 5 * * * /data/myscript/sdac/mbgmgmt/sale_info.sh &> /data/myscript/sdac/mbgmgmt/logs/sale_info.log.$(date "+\%Y\%m\%d")
+#15 5 * * * /data/myscript/sdac/mbgmgmt/sellin_track/sellout_dim_summary_delta.sh &> /data/myscript/sdac/mbgmgmt/sellin_track/logs/sellout_dim_summary_delta.log.$(date "+\%Y\%m\%d")
+#30 5 * * * /data/myscript/sdac/mbgmgmt/activation_track/sdac_dim_summary_delta.sh &> /data/myscript/sdac/mbgmgmt/activation_track/logs/sdac_dim_summary_delta.log.$(date "+\%Y\%m\%d")
+30 0 * * * /data/myscript/feedback/worldwide/feedback-stat.sh >> /data/myscript/feedback/worldwide/logs/feedback-stat.log
+0 1,8,12,20 * * * /data/myscript/hive/partition-tools/alter-part /data/myscript/hive/partition-tools/alter-part-daily.conf >>  /data/myscript/hive/partition-tools/logs/alter-part-daily.log
+0 2,4,8 1 * * /data/myscript/hive/partition-tools/alter-part /data/myscript/hive/partition-tools/alter-part-monthly.conf >> /data/myscript/hive/partition-tools/logs/alter-part-monthly.log
+30 1 * * * /data/myscript/hive/clean-data.sh >> /data/myscript/hive/logs/clean-data.log.$(date "+\%Y\%m\%d")
+

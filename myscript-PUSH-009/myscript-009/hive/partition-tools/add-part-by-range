@@ -1,0 +1,47 @@
+#! /bin/bash
+# This script is designed and implemented by Jason Koo on 20150106.
+# This script is dependent on dateloop, montloop script.
+# Usage: ./add-part-by-range  [configFile location]
+if [ -z "$1" ]; then
+    echo "Configuration file must be provided !"
+    echo "Usage: $0 [configFile location]"
+    exit 1
+fi
+
+DIR=$(cd $(dirname "$0"); pwd)
+
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo
+echo $(date +"%Y%m%d %T")
+echo
+configFile=$1
+grep -v '^#' $configFile | while read basePath db tbl partname partscript start end useJAR;
+do
+    echo "Start adding partitions for $db.$tbl between $start and $end ."
+    hiveQL=""
+    if [ "$useJAR" -eq 1 ]; then
+        hiveQL+="ADD JAR /home/lestat/jar/lestat-hive-0.0.1-SNAPSHOT.jar; "
+    fi
+    hiveQL+="use $db; "
+    hiveQL+="ALTER TABLE $tbl ADD IF NOT EXISTS "
+    eflag=0
+    for partvalue in `$DIR/$partscript $start $end`
+    do
+        partdir="$basePath/$db/$tbl/$partvalue"
+        if hadoop fs -test -e $partdir ; then
+            eflag=1
+            echo "partition $partname='$partvalue' to be added ."
+            hiveQL+="PARTITION ($partname = '$partvalue') LOCATION '$partdir' "
+        else
+            echo "$partdir does not exist !"
+        fi
+    done
+    hiveQL+=";"
+    if [ "$eflag" -eq 1 ]; then
+        echo "hiveQL to be executed: $hiveQL"
+        hive -e "$hiveQL"
+    else
+        echo "NO partition needs to be added for $db.$tbl between $start and $end ."
+    fi
+    echo "End adding partitions for $db.$tbl between $start and $end ."
+done

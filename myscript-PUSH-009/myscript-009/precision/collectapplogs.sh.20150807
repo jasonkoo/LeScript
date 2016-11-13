@@ -1,0 +1,187 @@
+#!/usr/bin/expect
+
+set YOURDATE [exec date -d "1 days ago" -I ]
+set MYDATE [exec date -d "1 days ago" +%Y%m%d ]
+set timeout 3600
+set username applog
+set password copylog123
+set port 22222
+
+exec mkdir -p /data/applogs/$MYDATE
+
+#set host 10.0.2.49
+#set src_file /home/game/web/replacelogs/$YOURDATE.log
+#set dest_file /data/applogs/$MYDATE/49.log
+
+#spawn scp -P $port $username@$host:$src_file $dest_file 
+#	expect {
+#		"(yes/no)?"
+#			{
+#				send "yes\n"
+#				expect "*assword:" { send "$password\n"}
+#			}
+#		"*assword:"
+#			{
+#				send "$password\n"
+#			}
+#		}
+#expect {
+#        "100%"
+#                {
+#                        expect eof
+#                }
+#        "*No such file or directory"
+#                {
+#                        expect eof
+#                }
+#        }
+#expect eof
+
+set host 10.0.2.52
+set src_file /home/game/web/replacelogs/$YOURDATE.log
+set dest_file /data/applogs/$MYDATE/52.log
+
+spawn scp -P $port $username@$host:$src_file $dest_file 
+	expect {
+		"(yes/no)?"
+			{
+				send "yes\n"
+				expect "*assword:" { send "$password\n"}
+			}
+		"*assword:"
+			{
+				send "$password\n"
+			}
+		}
+expect {
+	"100%"
+		{
+			expect eof
+		}
+	"*No such file or directory"
+		{
+			expect eof
+		}
+	}
+expect eof
+
+set host 10.0.2.53
+set src_file /home/game/web/replacelogs/$YOURDATE.log
+set dest_file /data/applogs/$MYDATE/53.log
+
+spawn scp -P $port $username@$host:$src_file $dest_file 
+	expect {
+		"(yes/no)?"
+			{
+				send "yes\n"
+				expect "*assword:" { send "$password\n"}
+			}
+		"*assword:"
+			{
+				send "$password\n"
+			}
+		}
+expect "100%"
+expect eof
+
+#set host 10.0.2.54
+#set src_file /home/game/web/replacelogs/$YOURDATE.log
+#set dest_file /data/applogs/$MYDATE/54.log
+
+#spawn scp -P $port $username@$host:$src_file $dest_file 
+#	expect {
+#		"(yes/no)?"
+#			{
+#				send "yes\n"
+#				expect "*assword:" { send "$password\n"}
+#			}
+#		"*assword:"
+#			{
+#				send "$password\n"
+#			}
+#		}
+#expect "100%"
+#expect eof
+
+set host 10.0.2.55
+set src_file /home/game/web/replacelogs/$YOURDATE.log
+set dest_file /data/applogs/$MYDATE/55.log
+
+spawn scp -P $port $username@$host:$src_file $dest_file 
+	expect {
+		"(yes/no)?"
+			{
+				send "yes\n"
+				expect "*assword:" { send "$password\n"}
+			}
+		"*assword:"
+			{
+				send "$password\n"
+			}
+		}
+expect "100%"
+expect eof
+
+sleep 60
+
+set host 10.0.2.56
+set src_file /home/game/web/replacelogs/$YOURDATE.log
+set dest_file /data/applogs/$MYDATE/56.log
+
+spawn scp -P $port $username@$host:$src_file $dest_file 
+	expect {
+		"(yes/no)?"
+			{
+				send "yes\n"
+				expect "*assword:" { send "$password\n"}
+			}
+		"*assword:"
+			{
+				send "$password\n"
+			}
+		}
+expect "100%"
+expect eof
+
+sleep 60
+
+set host 10.0.2.57
+set src_file /home/game/web/replacelogs/$YOURDATE.log
+set dest_file /data/applogs/$MYDATE/57.log
+
+spawn scp -P $port $username@$host:$src_file $dest_file 
+	expect {
+		"(yes/no)?"
+			{
+				send "yes\n"
+				expect "*assword:" { send "$password\n"}
+			}
+		"*assword:"
+			{
+				send "$password\n"
+			}
+		}
+expect "100%"
+expect eof
+
+
+sleep 60
+
+#set host 10.0.2.58
+#set src_file /home/game/web/replacelogs/$YOURDATE.log
+#set dest_file /data/applogs/$MYDATE/58.log
+
+#spawn scp -P $port $username@$host:$src_file $dest_file 
+#	expect {
+#		"(yes/no)?"
+#			{
+#				send "yes\n"
+#				expect "*assword:" { send "$password\n"}
+#			}
+#		"*assword:"
+#			{
+#				send "$password\n"
+#			}
+#		}
+#expect "100%"
+#expect eof

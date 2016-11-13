@@ -1,0 +1,8 @@
+#! /bin/bash
+# Pass the number of months away from today
+# Return the formated month  
+
+mp=%Y%m
+
+themonth=$(date -d "$1 months ago" +$mp)
+echo $themonth

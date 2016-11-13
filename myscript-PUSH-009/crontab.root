@@ -1,0 +1,7 @@
+#30 6 * * * /data/myscript/hdfs/del-table-part.sh >> /data/myscript/hdfs/logs/del-table-part.log
+#0 7 * * * /data/myscript/mdrill/del-mdrill-log.sh >> /data/myscript/mdrill/logs/del-mdrill-log.log.$(date "+\%Y\%m\%d")
+#50 7 * * * /data/myscript/feedback/zuk/process-feedback.sh >> /data/myscript/feedback/zuk/logs/process-feedback.log
+30 2 * * * /data/myscript/device/processdevice.sh >> /data/myscript/device/logs/processdevice.log 
+0 4 * * * /data/myscript/feedback/worldwide/process-feedback.sh >> /data/myscript/feedback/worldwide/logs/process-feedback.log
+0 8 * * * /data/myscript/precision/processapplogs.sh >> /data/myscript/precision/logs/processapplogs.log
+0 12 * * * /data/myscript/hdfs/del-part.sh >> /data/myscript/hdfs/logs/del-part.log

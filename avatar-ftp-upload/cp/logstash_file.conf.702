@@ -1,0 +1,94 @@
+input {
+    kafka {
+         codec => plain {
+            format => "%{message}"
+        }
+        zk_connect => "psb-la-vm04:2181,psb-la-vm05:2181" # string (optional), default: "localhost:2181"
+        group_id => "logstash" # string (optional), default: "logstash"
+        topic_id => "hit-topic" # string (optional), default: "test"
+        reset_beginning => false # boolean (optional), default: false
+        consumer_threads => 6 # number (optional), default: 1
+        queue_size => 20000 # number (optional), default: 20
+        rebalance_max_retries => 4 # number (optional), default: 4
+        rebalance_backoff_ms => 2000 # number (optional), default:  2000
+        consumer_timeout_ms => -1 # number (optional), default: -1
+        consumer_restart_on_error => true # boolean (optional), default: true
+        consumer_restart_sleep_ms => 0 # number (optional), default: 0
+        decorate_events => true # boolean (optional), default: true
+        #consumer_id => "logstash-16" # string (optional) default: nil
+        fetch_message_max_bytes => 1048576 # number (optional) default: 1048576
+    }
+}
+
+
+
+
+filter {
+  ruby {
+        code => "event['deviceId']='000000000000000';
+                 event['netaccessType']='1';   
+                 event['deviceIdType']='imei';
+                 event['channelName']='unknown';
+                 event['pid']='0';
+                 event['peVersion']='unknown';
+                 event['peVerCode']='0';
+                 event['deviceModel']='unknown';
+                 event['ip']='1.1.1.1';
+				 event['osVersion']='unknown';
+                 event['appkey']='YF7FAPICY0JL'"
+  }
+
+  json {
+    source => "message"
+  }
+
+
+  ruby {
+           code => "require 'socket';event['host_str']=Socket.gethostname;event['pid']=Process.pid;
+             now=Time.now;event['date_str']=now.strftime('%Y-%m-%d %H:%M:%S');
+             event['file_time1']=now.strftime('%Y-%m-%d');
+             event['file_index1']=now.hour;
+             event['file_index2']=(now.min/10);
+             logtime=Time.parse(event['hitTime']);
+             event['file_time2']=logtime.strftime('%Y-%m-%d');
+             logtime_i=logtime.to_i;event['logtime_str']=logtime_i;
+             event['time_str']=(logtime_i-600);event['time_str1']=(logtime_i-1);
+             event['rand_str2']=(rand(19999999)+10000000);event['rand_str1']=(rand(19999999)+10000000);
+             event['fwcs']='111';
+             event['file_index3']=logtime.hour;
+             event['file_index4']=(logtime.min/5)"
+  }
+}
+
+
+
+
+
+output {
+if [firstTime] {
+  file {
+#    tags => ["first"]
+    codec => "plain" # codec (optional), default: "plain"
+    flush_interval => 15 # number (optional), default: 2
+    gzip => false # boolean (optional), default: false
+    message_format =>
+"%{date_str}.050:ctx=1.8.4!2!%{appkey}!%{deviceId}!!%{rand_str1}!unknown!1667649351!1346428850398!%{time_str}000!%{time_str1}000!%{logtime_str}000!%{fwcs}!%{netaccessType}!%{deviceIdType}!%{deviceId}!%{channelName}&evt=%{pid}_push!(2!PAGE_QUEUE_NO!103!3)&ua=%{peVersion}/%{peVerCode}(Linux;U;%{osVersion};zh-cn;%{deviceModel};;;lenovo)&ip=%{ip}
+%{date_str}.050:ctx=1.8.4!3!%{appkey}!%{deviceId}!!%{rand_str2}!unknown!1667649351!1346428850398!%{time_str}000!%{time_str1}000!%{logtime_str}000!%{fwcs}!%{netaccessType}!%{deviceIdType}!%{deviceId}!%{channelName}&evt=%{pid}_push!(2!PAGE_QUEUE_NO!103!3)&ua=%{peVersion}/%{peVerCode}(Linux;U;%{osVersion};zh-cn;%{deviceModel};;;lenovo)&ip=%{ip}"
+    path => "/data/logstash/logstash/data/afile-%{host_str}-%{file_time2}-%{file_index3}-%{file_index4}-%{pid}" # string (required)
+    #path => "/dev/null" # string (required)
+    workers => 1 # number (optional), default: 1
+  }
+ }
+
+file {
+    codec => "plain" # codec (optional), default: "plain"
+    flush_interval => 15 # number (optional), default: 2
+    gzip => false # boolean (optional), default: false
+    message_format => "%{message}"
+#    message_format => '{"result":"%{result}","hitTime":"%{hitTime}","firstTime":%{firstTime},"pid":"%{pid}","adId":"%{adId}","accessNum":%{accessNum},"apn":"%{apn}","cellId":"%{cellId}","channelName":"%{channelName}","cityName":"%{cityName}","chargeStatus":"%{chargeStatus}","countryCode":"%{countryCode}","createDate":"%{createDate}","custVersion":"%{custVersion}","deviceIMSI":"%{deviceIMSI}","deviceModel":"%{deviceModel}","deviceId":"%{deviceId}","deviceIdType":"%{deviceIdType}","ip":"%{ip}","locId":"%{locId}","modifyDate":"%{modifyDate}","netaccessType":"%{netaccessType}","operationType":"%{operationType}","operatorCode":"%{operatorCode}","osVersion":"%{osVersion}","pePkgName":"%{pePkgName}","peVerCode":"%{peVerCode}","peVersion":"%{peVersion}","pePollVersion":"%{pePollVersion}","sysId":"%{sysId}","latitude":"%{latitude}","longitude":"%{longitude}"}'
+    path => "/data/logstash/logstash/data/tfile-%{host_str}-%{file_time2}-%{file_index3}-%{file_index4}-%{pid}" # string (required)
+    #path => "/dev/null" # string (required)
+    workers => 10 # number (optional), default: 1
+  }
+}
+

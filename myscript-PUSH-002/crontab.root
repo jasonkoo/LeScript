@@ -1,0 +1,2 @@
+#0 2 * * 1,5 source ~/.bashrc && /data/myscript/restart-mdrill-topology.sh >> /data/myscript/logs/restart-mdrill.a.log 2>&1
+#*/1 * * * * /data/myscript/testpy.sh >> /data/myscript/logs/test.a.log 2>&1

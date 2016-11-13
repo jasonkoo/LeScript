@@ -1,0 +1,37 @@
+#! /bin/bash
+# This script is designed and implemented by Jason Koo on 20150106.
+# This script is dependent on dateloop, montloop script.
+# Usage: ./drop-part-by-range  [configFile location]
+if [ -z "$1" ]; then
+    echo "Configuration file must be provided !"
+    echo "Usage: $0 [configFile location]"
+    exit 1
+fi
+
+DIR=$(cd $(dirname "$0"); pwd)
+
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo
+echo $(date +"%Y%m%d %T")
+echo
+configFile=$1
+grep -v '^#' $configFile | while read basePath db tbl partname partscript start end useJAR;
+do
+    echo "Start dropping partitions for $db.$tbl between $start and $end ."
+    hiveQL=""
+    if [ "$useJAR" -eq 1 ]; then
+        hiveQL+="ADD JAR /home/lestat/jar/lestat-hive-0.0.1-SNAPSHOT.jar; "
+    fi
+    hiveQL+="use $db; "
+    hiveQL+="ALTER TABLE $tbl DROP IF EXISTS "
+    for partvalue in `$DIR/$partscript $start $end`
+    do
+       echo "partition $partname='$partvalue' to be dropped ."
+       hiveQL+="PARTITION ($partname = '$partvalue'), "
+    done
+    # deliberately add a duplicate tail for comma ending 
+    hiveQL+="PARTITION ($partname = '$partvalue');"
+    echo "hiveQL to be executed: $hiveQL"
+    hive -e "$hiveQL"
+    echo "End dropping partitions for $db.$tbl between $start and $end ."
+done

@@ -1,0 +1,22 @@
+#! /bin/bash
+# Pass startdate as the first argument and enddate as the second argument.  By default, today is the enddate.
+# A list of formated date between the startdate and the enddate will be returned. 
+
+
+function datediff(){
+echo $(($(($(date -d "$2" "+%s") - $(date -d "$1" "+%s"))) / 86400))
+}
+
+dp="%Y%m%d"
+sd=$1
+if [ -n "$2" ] ; then
+  ed=$2
+else
+  ed=$(date -d "0 days ago" +$dp)
+fi
+diff=$(datediff $sd $ed)
+for (( c=0; c<=$diff; c++ ))
+do
+    thedate=$(date -d "$sd +$c day" +$dp)
+    echo $thedate
+done

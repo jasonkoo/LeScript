@@ -1,0 +1,7 @@
+#! /bin/bash
+# Pass the number of days away from today
+# Return the formated date  
+
+dp="%Y%m%d"
+thedate=$(date -d "$1 days ago" +$dp)
+echo $thedate

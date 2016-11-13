@@ -1,0 +1,4 @@
+#3,8,13,18,23,28,33,38,43,48,53,58 * * * * /data/myscript/ftpupload.sh >> /data/myscript/logs/avatar_upload.a.log
+30 2 * * * /data/myscript/autodel.sh >> /data/myscript/logs/autodel.a.log
+53 * * * * /data/myscript/fbdata2hdfs.sh >> /data/myscript/logs/fbdata2hdfs.a.log
+#2,12,22,32,42,52 * * * * /data/myscript/hitdata2hdfs.sh >> /data/myscript/logs/hitdata2hdfs.a.log
